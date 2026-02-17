@@ -22,9 +22,9 @@ A robust, real-time polling application built with **Next.js**, **Socket.IO**, a
 - **Universal Links**: Share links persist indefinitely; data is stored permanently.
 
 ### 3. Real-Time Results
-- **Live Updates**: Built with **Socket.IO**, results update instantly on all connected clients without manual refreshing.
+- **Live Updates**: Built with **Serverless Polling**, results update automatically on all connected clients.
 - **Optimistic UI**: Immediate visual feedback for voters.
-- **Connection Status**: Live indicator showing socket connection state.
+- **Connection Status**: Live indicator showing connection state.
 
 ## 🚀 Deployment (Critical Step)
 
@@ -56,8 +56,8 @@ Implemented robust mechanisms to ensure poll integrity (See [SUBMISSION_NOTES.md
 ## 🛠️ Tech Stack
 
 - **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
-- **Real-Time Engine**: [Socket.IO](https://socket.io/) (Custom Server)
-- **Database**: SQLite
+- **Real-Time Engine**: SWR-style Polling (Serverless Compatible)
+- **Database**: PostgreSQL (Neon)
 - **ORM**: [Prisma](https://www.prisma.io/)
 - **Language**: TypeScript
 - **Styling**: CSS Variables & Custom Glassmorphism Design
@@ -93,10 +93,9 @@ Implemented robust mechanisms to ensure poll integrity (See [SUBMISSION_NOTES.md
    ```bash
    npm run dev
    ```
-   *Note: This implementation uses a custom server (`server.ts`) running on port **3010** to integrate Socket.IO with Next.js.*
 
 5. **Open the App**
-   Visit `http://localhost:3010` to start using the app.
+   Visit `http://localhost:3000` to start using the app.
 
 ---
 
@@ -112,7 +111,6 @@ Implemented robust mechanisms to ensure poll integrity (See [SUBMISSION_NOTES.md
 │   └── prisma.ts       # Prisma Client Singleton
 ├── prisma/
 │   └── schema.prisma   # Database Schema (Poll, Option, Vote)
-├── server.ts           # Custom Node Server (Socket.IO + Next.js)
 └── public/             # Static Assets
 ```
 
