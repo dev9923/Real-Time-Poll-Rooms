@@ -120,3 +120,30 @@ Implemented robust mechanisms to ensure poll integrity (See [SUBMISSION_NOTES.md
 
 ## 🔒 Fairness Notes
 Detailed explanation of the **Fairness/Anti-Abuse** controls and **Real-Time Architecture** can be found in the [SUBMISSION_NOTES.md](./SUBMISSION_NOTES.md) file.
+
+## 🛡️ Edge Cases Handled
+
+1.  **Duplicate Voting**: 
+    -   *Scenario*: User tries to vote multiple times by refreshing or opening a new tab.
+    -   *Solution*: Checks both LocalStorage ID (browser-based) and IP Address (network-based) before accepting vote.
+2.  **Concurrency**: 
+    -   *Scenario*: Two users vote for the same option at the exact same millisecond.
+    -   *Solution*: Database transactions ensure atomic updates; polling mechanism fetches the latest "true" state.
+3.  **Network Falters**: 
+    -   *Scenario*: User loses connection while viewing a poll.
+    -   *Solution*: The polling system automatically recovers and fetches the latest data when the connection restores.
+4.  **Empty/Invalid Polls**: 
+    -   *Scenario*: User tries to create a poll with no options or title.
+    -   *Solution*: Strict validation on both Client (UI) and Server (API) prevents malformed data.
+
+## 🚧 Known Limitations & Future Improvements
+
+1.  **Polling vs WebSockets**: 
+    -   *Limitation*: Currently uses 2-second polling for serverless compatibility (Vercel/Netlify).
+    -   *Future*: Implement a dedicated WebSocket microservice (e.g., Pusher or separate Node.js server) for true sub-second real-time updates without polling overhead.
+2.  **IP Anti-Abuse in NAT**: 
+    -   *Limitation*: Users on the same WiFi (e.g., a university dorm) share an IP and might be blocked from voting.
+    -   *Future*: Implement a session-based cookie or user authentication system to allow distinct votes from shared networks.
+3.  **Strict Transitions**: 
+    -   *Limitation*: No "Close Poll" feature yet.
+    -   *Future*: Add admin controls to manually close voting or set an automatic expiration timer.
