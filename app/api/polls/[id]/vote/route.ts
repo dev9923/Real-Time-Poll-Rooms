@@ -40,15 +40,14 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
             }
         });
 
-        // Emit socket event
-        // Access global.io
-        const io = (global as any).io;
-        if (io) {
-            io.to(`poll-${pollId}`).emit('newVote', {
-                optionId,
-                pollId // helpful for debugging
-            });
-        }
+        // Emit socket event (Removed: Client uses SWR Polling now)
+        // const io = (global as any).io;
+        // if (io) {
+        //     io.to(`poll-${pollId}`).emit('newVote', {
+        //         optionId,
+        //         pollId
+        //     });
+        // }
 
         return NextResponse.json(vote);
     } catch (error) {

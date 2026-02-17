@@ -1,12 +1,11 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
-import io from 'socket.io-client';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 
 type Option = {
     id: number;
     text: string;
-    votes: any[];
+    votes?: any[]; // Keep for compatibility if needed
     voteCount: number;
 };
 
@@ -20,11 +19,11 @@ export default function PollClient({ initialPoll }: { initialPoll: Poll }) {
     const [poll, setPoll] = useState<Poll>(initialPoll);
     const [voterId, setVoterId] = useState<string>('');
     const [hasVoted, setHasVoted] = useState(false);
-    const [socketConnected, setSocketConnected] = useState(false);
+    const [isLive, setIsLive] = useState(false); // Replaces socketConnected
     const [copySuccess, setCopySuccess] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [toast, setToast] = useState('');
 
+    // --- 1. Initialize Voter ID ---
     useEffect(() => {
         let id = localStorage.getItem('poll_voter_id');
         if (!id) {
@@ -32,55 +31,42 @@ export default function PollClient({ initialPoll }: { initialPoll: Poll }) {
             localStorage.setItem('poll_voter_id', id);
         }
         setVoterId(id);
+        setIsLive(true); // Treat as "connected" once mounted
     }, []);
 
+    // --- 2. Polling Logic (Serverless Real-Time) ---
+    // Fetch latest poll data every 2 seconds
     useEffect(() => {
-        const socket = io();
+        const interval = setInterval(async () => {
+            try {
+                const res = await fetch(`/api/polls/${poll.id}`);
+                if (res.ok) {
+                    const latestPoll = await res.json();
 
-        socket.on('connect', () => {
-            console.log('Connected to socket', socket.id);
-            setSocketConnected(true);
-            socket.emit('joinPoll', poll.id);
-        });
-
-        socket.on('disconnect', () => {
-            console.log('Disconnected');
-            setSocketConnected(false);
-        });
-
-        socket.on('newVote', ({ optionId }) => {
-            setPoll((prev) => {
-                const newOptions = prev.options.map((opt) => {
-                    if (opt.id === optionId) {
-                        return {
-                            ...opt,
-                            voteCount: opt.voteCount + 1,
-                        };
-                    }
-                    return opt;
-                });
-
-                // Show toast
-                const votedOption = prev.options.find(o => o.id === optionId);
-                if (votedOption) {
-                    setToast(`New vote: ${votedOption.text}`);
-                    setTimeout(() => setToast(''), 3000);
+                    // Only update if data changed (simple check)
+                    setPoll((prev) => {
+                        // A rigorous deep comparison could be better, but we just overwrite for now
+                        // to ensure vote counts are always current.
+                        // We preserve the structure to avoid UI flicker.
+                        return latestPoll;
+                    });
                 }
+            } catch (err) {
+                console.error("Polling error", err);
+                // Don't show error to user, just skip this update
+            }
+        }, 2000); // 2 seconds poll interval
 
-                return { ...prev, options: newOptions };
-            });
-        });
-
-        return () => {
-            socket.emit('leavePoll', poll.id);
-            socket.disconnect();
-        };
+        return () => clearInterval(interval);
     }, [poll.id]);
 
+
+    // --- 3. Derived State ---
     const totalVotes = useMemo(() => {
         return poll.options.reduce((acc, curr) => acc + curr.voteCount, 0);
     }, [poll.options]);
 
+    // --- 4. Vote Handler ---
     const handleVote = async (optionId: number) => {
         if (!voterId) return;
 
@@ -99,12 +85,17 @@ export default function PollClient({ initialPoll }: { initialPoll: Poll }) {
 
             setHasVoted(true);
             setErrorMessage('');
+
+            // Optimistic update (optional, or just wait for next poll)
+            // waiting for next poll is safer for consistency
+
         } catch (err) {
             console.error(err);
             setErrorMessage('Error submitting vote. Check your connection.');
         }
     };
 
+    // --- 5. Share Handler ---
     const copyToClipboard = () => {
         if (typeof window !== 'undefined') {
             navigator.clipboard.writeText(window.location.href);
@@ -137,10 +128,11 @@ export default function PollClient({ initialPoll }: { initialPoll: Poll }) {
                                 width: '8px',
                                 height: '8px',
                                 borderRadius: '50%',
-                                backgroundColor: socketConnected ? '#22c55e' : '#f59e0b',
-                                display: 'inline-block'
+                                backgroundColor: isLive ? '#22c55e' : '#f59e0b',
+                                display: 'inline-block',
+                                animation: isLive ? 'pulse 2s infinite' : 'none'
                             }}></span>
-                            {socketConnected ? 'Live' : 'Connecting...'}
+                            {isLive ? 'Live Updates' : 'Connecting...'}
                         </span>
                     </div>
                 </div>
@@ -241,30 +233,14 @@ export default function PollClient({ initialPoll }: { initialPoll: Poll }) {
                     </div>
                     {copySuccess && <p style={{ color: '#22c55e', fontSize: '0.9rem', marginTop: '0.5rem' }}>{copySuccess}</p>}
                 </div>
-
-                {/* Toast Notification */}
-                {toast && (
-                    <div style={{
-                        position: 'fixed',
-                        bottom: '2rem',
-                        right: '2rem',
-                        backgroundColor: '#1e293b',
-                        color: 'white',
-                        padding: '1rem 1.5rem',
-                        borderRadius: 'var(--radius)',
-                        boxShadow: 'var(--shadow-lg)',
-                        zIndex: 100,
-                        animation: 'fadeIn 0.3s ease-out forwards',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.75rem'
-                    }}>
-                        <span style={{ fontSize: '1.25rem' }}>✨</span>
-                        <span style={{ fontWeight: 500 }}>{toast}</span>
-                    </div>
-                )}
-
             </div>
+            <style jsx>{`
+                @keyframes pulse {
+                    0% { opacity: 0.6; transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+                    70% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+                    100% { opacity: 0.6; transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+                }
+            `}</style>
         </div>
     );
 }
