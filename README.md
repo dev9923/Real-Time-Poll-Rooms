@@ -25,6 +25,20 @@ A robust, real-time polling application built with **Next.js**, **Socket.IO**, a
 - **Optimistic UI**: Immediate visual feedback for voters.
 - **Connection Status**: Live indicator showing socket connection state.
 
+## 🚀 Deployment (Critical Step)
+
+This app uses a PostgreSQL database (Neon). You **MUST** set the environment variable on your hosting platform for it to work.
+
+### Vercel / Netlify Setup
+1.  Go to your project settings.
+2.  Find the **Environment Variables** section.
+3.  Add the following variable:
+    *   **Key**: `DATABASE_URL`
+    *   **Value**: `postgresql://neondb_owner:npg_BC4qEMlIn7ja@ep-divine-bird-aicuw9f5-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require`
+4.  **Redeploy** your application.
+
+Without this, the app will fail with `Internal Server Error` because it cannot connect to the database.
+
 ### 4. Fairness & Anti-Abuse
 Implemented robust mechanisms to ensure poll integrity (See [SUBMISSION_NOTES.md](./SUBMISSION_NOTES.md) for full details):
 - **LocalStorage Voter ID**: Prevents simple page refreshes from duplicating votes.
