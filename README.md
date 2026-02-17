@@ -59,7 +59,6 @@ Implemented robust mechanisms to ensure poll integrity (See [SUBMISSION_NOTES.md
 - **Real-Time Engine**: SWR-style Polling (Serverless Compatible)
 - **Database**: PostgreSQL (Neon)
 =======
-- **Real-Time Engine**: [Socket.IO](https://socket.io/) (Custom Server)
 - **Database**: Neon (PostgreSQL)
 >>>>>>> faa57d59e8476442b4d920dcc77805b11c87da22
 - **ORM**: [Prisma](https://www.prisma.io/)
