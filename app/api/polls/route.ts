@@ -22,6 +22,6 @@ export async function POST(req: Request) {
     return NextResponse.json(poll);
   } catch (error) {
     console.error('Error creating poll:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Internal Server Error' }, { status: 500 });
   }
 }
