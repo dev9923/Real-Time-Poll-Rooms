@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "ts-node --project tsconfig.json server.ts",
-        "build": "next build",
+        "build": "npx prisma generate && next build",
         "start": "NODE_ENV=production ts-node --project tsconfig.json server.ts"
     },
     "dependencies": {
