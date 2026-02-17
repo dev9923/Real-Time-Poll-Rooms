@@ -1,1 +1,27 @@
-{"name": "real-time-poll-rooms", "version": "1.0.0", "private": true, "scripts": {"dev": "next dev", "build": "next build", "start": "next start"}, "dependencies": {"next": "^14.0.0", "react": "^18.0.0", "react-dom": "^18.0.0", "prisma": "^4.0.0", "@prisma/client": "^4.0.0", "socket.io": "^4.0.0"}, "devDependencies": {"typescript": "^4.6.0", "@types/react": "^17.0.0", "@types/node": "^16.0.0"}}
+{
+    "name": "real-time-poll-rooms",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "ts-node --project tsconfig.json server.ts",
+        "build": "next build",
+        "start": "NODE_ENV=production ts-node --project tsconfig.json server.ts"
+    },
+    "dependencies": {
+        "@prisma/client": "^4.0.0",
+        "@types/express": "^5.0.6",
+        "express": "^5.2.1",
+        "next": "^16.1.6",
+        "prisma": "^4.0.0",
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "socket.io": "^4.0.0",
+        "socket.io-client": "^4.8.3",
+        "ts-node": "^10.9.2"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "@types/react": "^18.0.0",
+        "typescript": "^5.1.0"
+    }
+}

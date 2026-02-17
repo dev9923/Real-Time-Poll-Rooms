@@ -1,36 +1,107 @@
-# Real-Time Poll Rooms
+# 🗳️ Real-Time Poll Rooms
 
-## Project Overview
-Real-Time Poll Rooms is a web-based application that allows users to create, manage, and participate in polls in real time. The app provides an interactive experience for users to vote and view results live as votes are cast.
+A robust, real-time polling application built with **Next.js**, **Socket.IO**, and **Prisma**. Create polls, share links, and watch results update instantly as people vote.
 
-## Features
-- **Real-time polling:** Users can create polls and vote instantaneously.
-- **User-friendly interface:** Simple and intuitive design for easy navigation.
-- **Instant results:** View results as votes are counted in real-time.
-- **Multiple question types:** Supports yes/no, multiple-choice, and rating polls.
+> **Status**: Fully Functional  
+> **Fairness**: Dual-Layer Anti-Abuse Protection  
+> **Persistence**: SQLite Database Enforced
 
-## Installation Instructions
-1. Clone the repository:
-   ```
+---
+
+## 🚀 Features (Success Criteria)
+
+### 1. Poll Creation
+- **Dynamic Form**: Create polls with a question and unlimited options (minimum 2).
+- **Validation**: Strict client-side and server-side validation ensures data integrity.
+- **Instant Generation**: Unique, shareable URL generated immediately upon creation.
+
+### 2. Join by Link
+- **Seamless Access**: Polls are accessible via unique URLs (e.g., `/polls/123`).
+- **Share**: Integrated "Copy Link" button makes sharing easy.
+- **Universal Links**: Share links persist indefinitely; data is stored permanently.
+
+### 3. Real-Time Results
+- **Live Updates**: Built with **Socket.IO**, results update instantly on all connected clients without manual refreshing.
+- **Optimistic UI**: Immediate visual feedback for voters.
+- **Connection Status**: Live indicator showing socket connection state.
+
+### 4. Fairness & Anti-Abuse
+Implemented robust mechanisms to ensure poll integrity (See [SUBMISSION_NOTES.md](./SUBMISSION_NOTES.md) for full details):
+- **LocalStorage Voter ID**: Prevents simple page refreshes from duplicating votes.
+- **IP Address Tracking**: Prevents multiple votes from the same network source or different browsers.
+- **Enforcement**: Server checks both ID and IP before accepting any vote.
+
+### 5. Persistence
+- **Database**: All data (Polls, Options, Votes) is stored in **SQLite** via **Prisma ORM**.
+- **Reliability**: Polls and votes persist across server restarts and page refreshes.
+- **History**: "My Polls" section tracks all created polls.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+- **Real-Time Engine**: [Socket.IO](https://socket.io/) (Custom Server)
+- **Database**: SQLite
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Language**: TypeScript
+- **Styling**: CSS Variables & Custom Glassmorphism Design
+
+---
+
+## 🏃‍♂️ Getting Started
+
+### Prerequisites
+- Node.js 18+
+- npm
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
    git clone https://github.com/dev9923/Real-Time-Poll-Rooms.git
    cd Real-Time-Poll-Rooms
    ```
-2. Install dependencies:
-   ```
+
+2. **Install dependencies**
+   ```bash
    npm install
    ```
-3. Start the server:
-   ```
-   npm start
-   ```
-4. Open your browser and go to `http://localhost:3000`.
 
-## Deployment Guide
-1. Build the application:
+3. **Initialize Database**
+   ```bash
+   npx prisma generate
+   npx prisma db push
    ```
-   npm run build
-   ```
-2. Deploy to your preferred hosting service (e.g., Heroku, Vercel, etc.).
-3. Make sure to set up the environment variables as needed for your database connection and other configurations.
 
-For detailed deployment instructions specific to your hosting service, check their official documentation.
+4. **Run the Application**
+   ```bash
+   npm run dev
+   ```
+   *Note: This implementation uses a custom server (`server.ts`) running on port **3010** to integrate Socket.IO with Next.js.*
+
+5. **Open the App**
+   Visit `http://localhost:3010` to start using the app.
+
+---
+
+## 📂 Project Structure
+
+```
+├── app/
+│   ├── api/            # API Routes (Vote handling, Poll creation)
+│   ├── polls/          # Poll Pages (View Poll, My Polls)
+│   ├── globals.css     # Global Styles (Glassmorphism, Variables)
+│   └── page.tsx        # Home Page (Create Poll Form)
+├── lib/
+│   └── prisma.ts       # Prisma Client Singleton
+├── prisma/
+│   └── schema.prisma   # Database Schema (Poll, Option, Vote)
+├── server.ts           # Custom Node Server (Socket.IO + Next.js)
+└── public/             # Static Assets
+```
+
+---
+
+## 🔒 Fairness Notes
+Detailed explanation of the **Fairness/Anti-Abuse** controls and **Real-Time Architecture** can be found in the [SUBMISSION_NOTES.md](./SUBMISSION_NOTES.md) file.
