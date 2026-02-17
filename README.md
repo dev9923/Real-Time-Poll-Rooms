@@ -33,10 +33,7 @@ This app uses a PostgreSQL database (Neon). You **MUST** set the environment var
 ### Vercel Setup
 1.  Go to your project settings.
 2.  Find the **Environment Variables** section.
-3.  Add the following variable:
-    *   **Key**: `DATABASE_URL`
-    *   **Value**: `postgresql://neondb_owner:npg_BC4qEMlIn7ja@ep-divine-bird-aicuw9f5-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require`
-4.  **Redeploy** your application.
+3.  **Redeploy** your application.
 
 Without this, the app will fail with `Internal Server Error` because it cannot connect to the database.
 
