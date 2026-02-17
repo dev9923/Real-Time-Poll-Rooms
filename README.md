@@ -30,7 +30,7 @@ A robust, real-time polling application built with **Next.js**, **Socket.IO**, a
 
 This app uses a PostgreSQL database (Neon). You **MUST** set the environment variable on your hosting platform for it to work.
 
-### Vercel / Netlify Setup
+### Vercel Setup
 1.  Go to your project settings.
 2.  Find the **Environment Variables** section.
 3.  Add the following variable:
@@ -47,9 +47,8 @@ Implemented robust mechanisms to ensure poll integrity (See [SUBMISSION_NOTES.md
 - **Enforcement**: Server checks both ID and IP before accepting any vote.
 
 ### 5. Persistence
-- **Database**: All data (Polls, Options, Votes) is stored in **SQLite** via **Prisma ORM**.
+- **Database**: All data (Polls, Options, Votes) is stored in **PostgreSQL**.
 - **Reliability**: Polls and votes persist across server restarts and page refreshes.
-- **History**: "My Polls" section tracks all created polls.
 
 ---
 
@@ -57,7 +56,7 @@ Implemented robust mechanisms to ensure poll integrity (See [SUBMISSION_NOTES.md
 
 - **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
 - **Real-Time Engine**: [Socket.IO](https://socket.io/) (Custom Server)
-- **Database**: SQLite
+- **Database**: Neon (PostgreSQL)
 - **ORM**: [Prisma](https://www.prisma.io/)
 - **Language**: TypeScript
 - **Styling**: CSS Variables & Custom Glassmorphism Design
@@ -112,7 +111,6 @@ Implemented robust mechanisms to ensure poll integrity (See [SUBMISSION_NOTES.md
 │   └── prisma.ts       # Prisma Client Singleton
 ├── prisma/
 │   └── schema.prisma   # Database Schema (Poll, Option, Vote)
-├── server.ts           # Custom Node Server (Socket.IO + Next.js)
 └── public/             # Static Assets
 ```
 
