@@ -3,8 +3,9 @@
 A robust, real-time polling application built with **Next.js**, **Socket.IO**, and **Prisma**. Create polls, share links, and watch results update instantly as people vote.
 
 > **Status**: Fully Functional  
+> **Live Demo**: [https://real-time-poll-rooms-gamma.vercel.app/](https://real-time-poll-rooms-gamma.vercel.app/)  
+> **Database**: Connected to **Neon (PostgreSQL)**  
 > **Fairness**: Dual-Layer Anti-Abuse Protection  
-> **Persistence**: SQLite Database Enforced
 
 ---
 
