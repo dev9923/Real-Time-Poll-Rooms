@@ -30,9 +30,6 @@ export default function RootLayout({
                             <Link href="/" style={{ color: 'var(--foreground)', textDecoration: 'none', fontWeight: 500, padding: '0.5rem 1rem', borderRadius: 'var(--radius)', transition: 'background 0.2s' }}>
                                 New Poll
                             </Link>
-                            <Link href="/polls" style={{ color: 'var(--foreground)', textDecoration: 'none', fontWeight: 500, padding: '0.5rem 1rem', borderRadius: 'var(--radius)', transition: 'background 0.2s' }}>
-                                My Polls
-                            </Link>
                             <a href="https://github.com/dev9923/Real-Time-Poll-Rooms" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--muted)', textDecoration: 'none', fontWeight: 500, padding: '0.5rem 1rem' }}>
                                 GitHub
                             </a>
