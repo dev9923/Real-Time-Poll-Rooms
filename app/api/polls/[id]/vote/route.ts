@@ -25,7 +25,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
         });
 
         if (existingVote) {
-            return NextResponse.json({ error: 'You has already voted in this poll.' }, { status: 403 });
+            return NextResponse.json({ error: 'You have already voted in this poll.' }, { status: 403 });
         }
 
         const vote = await prisma.vote.create({
